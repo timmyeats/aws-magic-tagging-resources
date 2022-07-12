@@ -24,7 +24,9 @@ Modify ```terraform.tfvars.template``` to ```terraform.tfvars```, and set the tf
 - Deploy resources:
 
    `terraform init`
+
    `terraform plan`
+   
    `terraform apply`
 
 - Delete resources:
