@@ -22,6 +22,20 @@ def add_tags_in_resource(tags, resource, add_tags=[]):
     return response, add_tags
 
 
+def add_comment_in_cloudfront(tags, resource):
+    distribution_id = resource.split('/')[1]
+    client = boto3.client("cloudfront")    
+    distribution_config = client.get_distribution_config(Id=distribution_id)    
+    distribution_config["DistributionConfig"]["Comment"] = "Created by " + tags["Owner"] 
+    response = client.update_distribution(
+        Id = distribution_id,
+        DistributionConfig = distribution_config["DistributionConfig"],
+        IfMatch=distribution_config["ETag"],
+    )
+    print(response)
+    return response
+
+
 def tagger(event, tags, resource_arn=None):
     response_elements = event["detail"]["responseElements"]
 
@@ -32,6 +46,7 @@ def tagger(event, tags, resource_arn=None):
         resource_arn = get_resource_arn(response_elements)
 
     if resource_arn != None:
+        response = add_comment_in_cloudfront(tags, resource_arn)
         response, tags = add_tags_in_resource(tags, resource_arn)
         response["resource_arn"] = resource_arn
         response["tags"] = tags
