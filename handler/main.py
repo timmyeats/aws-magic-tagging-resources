@@ -29,6 +29,9 @@ def lambda_handler(event, context):
         elif event["source"] == "aws.rds":
             response = rds_tagger.tagger(event, tags)
             
+        elif event["source"] == "aws.cloudfront":
+            response = cf_tagger.tagger(event, tags)
+
         else:
             response = "[LOG] No support source found!"
     else:
