@@ -25,6 +25,11 @@ locals {
       service   = "SNS"
       source    = ["aws.sns"]
       eventName = [{ "prefix" = "Create" }]
+    },
+    {
+      service   = "Lambda"
+      source    = ["aws.lambda"]
+      eventName = [{ "prefix" = "Create" }]
     }
   ]
 }
