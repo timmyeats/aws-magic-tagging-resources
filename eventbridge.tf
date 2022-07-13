@@ -18,6 +18,7 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
   count       = length(local.event_pattern)
   name        = "AWSAutoTaggingEventRule${local.event_pattern[count.index].service}"
   description = "Get the CloudTrail event from ${local.event_pattern[count.index].service}"
+  tags        = var.resource_tags
   event_pattern = jsonencode(
     {
       "source" : "${local.event_pattern[count.index].source}",
