@@ -1,3 +1,7 @@
+locals {
+  lambda_function_role = terraform.workspace == "default" ? aws_iam_role.lambda_function_role[0] : data.aws_iam_role.lambda_function_role[0]
+}
+
 module "lambda" {
   source        = "terraform-aws-modules/lambda/aws"
   version       = "3.3.1"
@@ -9,6 +13,6 @@ module "lambda" {
   memory_size   = 128
   timeout       = 30
   create_role   = false
-  lambda_role   = aws_iam_role.lambda_function_role.arn
+  lambda_role   = local.lambda_function_role.arn
   tags          = var.resource_tags
 }

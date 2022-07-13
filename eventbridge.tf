@@ -1,5 +1,5 @@
 locals {
-  lambda_assumed_event = "arn:aws:sts::${data.aws_caller_identity.current.account_id}:assumed-role/${aws_iam_role.lambda_function_role.name}/${module.lambda.lambda_function_name}"
+  lambda_assumed_event = "arn:aws:sts::${data.aws_caller_identity.current.account_id}:assumed-role/${local.lambda_function_role_name}/${module.lambda.lambda_function_name}"
   event_pattern = [
     {
       service   = "EC2"
