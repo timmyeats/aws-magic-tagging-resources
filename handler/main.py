@@ -2,6 +2,7 @@ import resource_tagger.ec2_tagger as ec2_tagger
 import resource_tagger.elb_tagger as elb_tagger
 import resource_tagger.rds_tagger as rds_tagger
 import resource_tagger.cloudfront_tagger as cf_tagger
+import resource_tagger.sns_tagger as sns_tagger
 import resource_tagger.taggers as taggers
 
 
@@ -31,6 +32,9 @@ def lambda_handler(event, context):
             
         elif event["source"] == "aws.cloudfront":
             response = cf_tagger.tagger(event, tags)
+
+        elif event["source"] == "aws.sns":
+            response = sns_tagger.tagger(event, tags)
 
         else:
             response = "[LOG] No support source found!"

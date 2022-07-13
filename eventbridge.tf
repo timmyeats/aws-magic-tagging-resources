@@ -20,6 +20,11 @@ locals {
       service   = "CloudFront"
       source    = ["aws.cloudfront"]
       eventName = ["CreateDistribution"]
+    },
+    {
+      service   = "SNS"
+      source    = ["aws.sns"]
+      eventName = [{ "prefix" = "Create" }]
     }
   ]
 }
