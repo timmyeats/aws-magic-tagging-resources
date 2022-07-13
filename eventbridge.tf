@@ -15,6 +15,11 @@ locals {
       service   = "RDS"
       source    = ["aws.rds"]
       eventName = [{ "prefix" = "Create" }]
+    },
+    {
+      service   = "CloudFront"
+      source    = ["aws.cloudfront"]
+      eventName = ["CreateDistribution"]
     }
   ]
 }
