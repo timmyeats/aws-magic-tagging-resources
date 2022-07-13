@@ -5,9 +5,9 @@ Use the EventBridge to trigger a Lambda function to tag resources in AWS.
 ## Prerequisites
 
 - Install terraform
-  
+
 - Install AWS CLI
-  
+
 - Set AWS credential in your environment, ```aws configure  --profile your_profile_name```
 
 - Set AWS profile in your environment, ```export AWS_PROFILE=your_profile_name```
@@ -16,8 +16,11 @@ Use the EventBridge to trigger a Lambda function to tag resources in AWS.
 
 Modify ```terraform.tfvars.template``` to ```terraform.tfvars```, and set the tfvars
 
-- aws_region  = "your aws default region"
-- resource_tags.project = "your project name"
+- resource_tags = {
+  terraform = "true"
+  project   = "aws-magic-tagging-resources"
+  version   = "v1.0.0"
+}
 
 ## Deploy & Delete resources
 
@@ -26,7 +29,7 @@ Modify ```terraform.tfvars.template``` to ```terraform.tfvars```, and set the tf
    `terraform init`
 
    `terraform plan`
-   
+
    `terraform apply`
 
 - Delete resources:
@@ -52,5 +55,6 @@ Default tags:
 -  SourceIP
 -  UserType
 -  EventTime
+-  UserName / RoleName
 
 ```
