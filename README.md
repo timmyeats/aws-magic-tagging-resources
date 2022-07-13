@@ -22,7 +22,7 @@ Modify ```terraform.tfvars.template``` to ```terraform.tfvars```, and set the tf
   version   = "v1.0.0"
 }
 
-## Deploy & Delete resources of region
+## Deploy and Destroy of resources in a single region
 
 - Deploy resources:
 
@@ -36,7 +36,7 @@ Modify ```terraform.tfvars.template``` to ```terraform.tfvars```, and set the tf
 
    `terraform destroy`
 
-## Deploy & Destroy multiple regions
+## Deploy and Destroy of resources in multiple regions
 
 - Deploy resources:
 
