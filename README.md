@@ -4,7 +4,7 @@ Use the EventBridge to trigger a Lambda function to tag resources in AWS.
 
 ## Prerequisites
 
-- Install terraform
+- Install Terraform
 
 - Install AWS CLI
 
