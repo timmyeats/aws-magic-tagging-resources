@@ -1,5 +1,5 @@
-from .taggers import get_resource_id
 import boto3
+from .taggers import get_resource_id
 
 
 # Create tags for AWS resources
@@ -28,6 +28,9 @@ def tagger(event, tags, resource_id=None):
     elif event["detail"]["eventName"] == "CreateManagedPrefixList":
         resource_id = response_elements["CreateManagedPrefixListResponse"]["prefixList"]["prefixListId"]
 
+    elif event["detail"]["eventName"] == "CreateNatGateway":
+        resource_id = response_elements["CreateNatGatewayResponse"]["natGateway"]["natGatewayId"]
+
     else:
         resource_id = get_resource_id(response_elements)
 
@@ -38,5 +41,4 @@ def tagger(event, tags, resource_id=None):
         return response
 
     else:
-        return ("[LOG] No resource id found!")
-
+        return "[LOG] No resource id found!"
