@@ -10,6 +10,16 @@ locals {
       service   = "ELB"
       source    = ["aws.elasticloadbalancing"]
       eventName = ["CreateLoadBalancer", "CreateTargetGroup"]
+    },
+    {
+      service   = "RDS"
+      source    = ["aws.rds"]
+      eventName = [{ "prefix" = "Create" }]
+    },
+    {
+      service   = "CloudFront"
+      source    = ["aws.cloudfront"]
+      eventName = ["CreateDistribution"]
     }
   ]
 }

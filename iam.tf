@@ -55,7 +55,11 @@ resource "aws_iam_policy" "lambda_tagging_policy" {
           "Effect" : "Allow",
           "Action" : [
             "ec2:*Tag*",
-            "elasticloadbalancing:*Tag*"
+            "elasticloadbalancing:*Tag*",
+            "rds:*Tag*",
+            "cloudfront:*Tag*",
+            "cloudfront:GetDistribution*",
+            "cloudfront:UpdateDistribution",
           ],
           "Resource" : "*"
         }
