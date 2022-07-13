@@ -1,6 +1,7 @@
 import re
 import datetime
 
+
 def get_identity_type(event, tags):
     tags["UserType"] = event["detail"]["userIdentity"]["type"]
 
@@ -36,15 +37,18 @@ def response_elements_data_processing(response_elements, regular_expression):
         keys.append(key)
         values.append(value)
 
-        if type(value) == dict:
-            for key, value in value.items():
-                keys.append(key)
-                values.append(value)
+        try:
+            if type(value) == dict:
+                for key, value in value.items():
+                    keys.append(key)
+                    values.append(value)
 
-        if type(value) == list:
-            for key, value in value[0].items():
-                keys.append(key)
-                values.append(value)
+            if type(value) == list:
+                for key, value in value[0].items():
+                    keys.append(key)
+                    values.append(value)
+        except:
+            continue
 
     # Get values from response elements
     for value in values:

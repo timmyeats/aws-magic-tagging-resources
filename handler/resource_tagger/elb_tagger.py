@@ -1,5 +1,5 @@
-from .taggers import get_resource_arn
 import boto3
+from .taggers import get_resource_arn
 
 
 # Create tags for AWS resources
@@ -35,5 +35,4 @@ def tagger(event, tags, resource_arn=None):
         return response
 
     else:
-        return ("[LOG] No resource arn found!")
-
+        return "[LOG] No resource arn found!"

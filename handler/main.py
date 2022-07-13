@@ -20,14 +20,14 @@ def lambda_handler(event, context):
     if tags != None:
         if event["source"] == "aws.ec2":
             response = ec2_tagger.tagger(event, tags)
-            print(response)
 
         elif event["source"] == "aws.elasticloadbalancing":
             response = elb_tagger.tagger(event, tags)
-            print(response)
 
         else:
-            print("[LOG] No support source found!")
-
+            response = "[LOG] No support source found!"
     else:
-        print("[LOG] Tags not found!")
+        response = "[LOG] No tags found!"
+    
+    print(response)
+    return response
