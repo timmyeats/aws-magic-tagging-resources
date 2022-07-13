@@ -1,5 +1,6 @@
 import resource_tagger.ec2_tagger as ec2_tagger
 import resource_tagger.elb_tagger as elb_tagger
+import resource_tagger.rds_tagger as rds_tagger
 import resource_tagger.taggers as taggers
 
 
@@ -23,6 +24,9 @@ def lambda_handler(event, context):
 
         elif event["source"] == "aws.elasticloadbalancing":
             response = elb_tagger.tagger(event, tags)
+
+        elif event["source"] == "aws.rds":
+            response = rds_tagger.tagger(event, tags)
 
         else:
             response = "[LOG] No support source found!"

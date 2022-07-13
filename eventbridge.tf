@@ -10,6 +10,11 @@ locals {
       service   = "ELB"
       source    = ["aws.elasticloadbalancing"]
       eventName = ["CreateLoadBalancer", "CreateTargetGroup"]
+    },
+    {
+      service   = "RDS"
+      source    = ["aws.rds"]
+      eventName = [{ "prefix" = "Create" }]
     }
   ]
 }
