@@ -60,6 +60,8 @@ resource "aws_iam_policy" "lambda_tagging_policy" {
             "cloudfront:*Tag*",
             "cloudfront:GetDistribution*",
             "cloudfront:UpdateDistribution",
+            "sns:*Tag*",
+            "lambda:*Tag*",
           ],
           "Resource" : "*"
         }

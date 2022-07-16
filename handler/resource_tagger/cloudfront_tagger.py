@@ -1,12 +1,11 @@
 import boto3
 from .taggers import get_resource_arn
+from .taggers import changing_tag_to_array
 
 
 # Create tags for AWS resources
-def add_tags_in_resource(tags, resource, add_tags=[]):
-    for tag_key, tag_value in tags.items():
-        add_tags.append({"Key": tag_key, "Value": tag_value})
-
+def add_tags_in_resource(tags, resource):
+    add_tags = changing_tag_to_array(tags)
     try:
         client = boto3.client("cloudfront")
         response = client.tag_resource(
@@ -15,25 +14,29 @@ def add_tags_in_resource(tags, resource, add_tags=[]):
                 "Items": add_tags
             }
         )
-
     except Exception as e:
         response = {"[LOG] Error: ": str(e)}
 
     return response, add_tags
 
 
-def add_comment_in_cloudfront(tags, resource):
+def add_comment_in_cloudfront(tags, resource, response=None):
     distribution_id = resource.split('/')[1]
     client = boto3.client("cloudfront")    
-    distribution_config = client.get_distribution_config(Id=distribution_id)    
-    distribution_config["DistributionConfig"]["Comment"] = "Created by " + tags["Owner"] 
-    response = client.update_distribution(
-        Id = distribution_id,
-        DistributionConfig = distribution_config["DistributionConfig"],
-        IfMatch=distribution_config["ETag"],
-    )
+    distribution_config = client.get_distribution_config(Id=distribution_id)
+
+    if distribution_config["DistributionConfig"]["Comment"] == "":
+        distribution_config["DistributionConfig"]["Comment"] = "Created by " + tags["Owner"] 
+        response = client.update_distribution(
+            Id = distribution_id,
+            DistributionConfig = distribution_config["DistributionConfig"],
+            IfMatch=distribution_config["ETag"],
+        )
+    else:
+        response = "[LOG] Distribution already has a comment!"
+
     print(response)
-    return response
+    return 
 
 
 def tagger(event, tags, resource_arn=None):
@@ -46,7 +49,7 @@ def tagger(event, tags, resource_arn=None):
         resource_arn = get_resource_arn(response_elements)
 
     if resource_arn != None:
-        response = add_comment_in_cloudfront(tags, resource_arn)
+        add_comment_in_cloudfront(tags, resource_arn)
         response, tags = add_tags_in_resource(tags, resource_arn)
         response["resource_arn"] = resource_arn
         response["tags"] = tags

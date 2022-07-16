@@ -2,24 +2,34 @@ locals {
   lambda_assumed_event = "arn:aws:sts::${data.aws_caller_identity.current.account_id}:assumed-role/${local.lambda_function_role_name}/${module.lambda.lambda_function_name}"
   event_pattern = [
     {
-      service   = "EC2"
-      source    = ["aws.ec2"]
-      eventName = [{ "prefix" = "Create" }, "RunInstances", "AllocateAddress", "CopyImage", "CopySnapshot"]
+      service    = "EC2"
+      source     = ["aws.ec2"]
+      event_name = [{ "prefix" = "Create" }, "RunInstances", "AllocateAddress", "CopyImage", "CopySnapshot"]
     },
     {
-      service   = "ELB"
-      source    = ["aws.elasticloadbalancing"]
-      eventName = ["CreateLoadBalancer", "CreateTargetGroup"]
+      service    = "ELB"
+      source     = ["aws.elasticloadbalancing"]
+      event_name = ["CreateLoadBalancer", "CreateTargetGroup"]
     },
     {
-      service   = "RDS"
-      source    = ["aws.rds"]
-      eventName = [{ "prefix" = "Create" }]
+      service    = "RDS"
+      source     = ["aws.rds"]
+      event_name = [{ "prefix" = "Create" }]
     },
     {
-      service   = "CloudFront"
-      source    = ["aws.cloudfront"]
-      eventName = ["CreateDistribution"]
+      service    = "CloudFront"
+      source     = ["aws.cloudfront"]
+      event_name = ["CreateDistribution"]
+    },
+    {
+      service    = "SNS"
+      source     = ["aws.sns"]
+      event_name = [{ "prefix" = "Create" }]
+    },
+    {
+      service    = "Lambda"
+      source     = ["aws.lambda"]
+      event_name = [{ "prefix" = "Create" }]
     }
   ]
 }
@@ -38,7 +48,7 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
             "anything-but" : "${local.lambda_assumed_event}"
           }]
         },
-        "eventName" : "${local.event_pattern[count.index].eventName}"
+        "eventName" : "${local.event_pattern[count.index].event_name}"
       }
     }
   )

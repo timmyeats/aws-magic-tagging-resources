@@ -1,0 +1,9 @@
+#############################################
+# Varaibles
+#############################################
+
+resource_tags = {
+  terraform = "true"
+  project   = "aws-magic-tagging-resources"
+  version   = "v1.3.0"
+}
