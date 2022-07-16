@@ -71,3 +71,11 @@ def get_resource_arn(response_elements):
     regular_expression = "arn\:aws\:.*"
     resource_arn = response_elements_data_processing(response_elements, regular_expression)
     return resource_arn
+
+
+# Changing a tag to an array tag
+def changing_tag_to_array(tags):
+    tags_array = []
+    for key, value in tags.items():
+        tags_array.append({"Key": key, "Value": value})
+    return tags_array   
