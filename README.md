@@ -1,4 +1,4 @@
-# aws-magic-tagging-resources
+# AWS Magic Tagging Resources
 
 Use the EventBridge to trigger a Lambda function to tag resources in AWS.
 
@@ -16,35 +16,13 @@ Use the EventBridge to trigger a Lambda function to tag resources in AWS.
 
 Modify ```terraform.tfvars.template``` to ```terraform.tfvars```, and set the tfvars
 
-- resource_tags = {
+```
+resource_tags = {
   terraform = "true"
   project   = "aws-magic-tagging-resources"
   version   = "v1.0.0"
 }
-
-## Deploy and Destroy of resources in a single region
-
-- Deploy resources:
-
-   `terraform init`
-
-   `terraform plan`
-
-   `terraform apply`
-
-- Destroy resources:
-
-   `terraform destroy`
-
-## Deploy and Destroy of resources in multiple regions
-
-- Deploy resources:
-
-   `sh multi-region-deploy.sh`
-
-- Destroy resources:
-
-   `sh multi-region-destroy.sh`
+```
 
 ## Resources
 
@@ -58,13 +36,48 @@ Modify ```terraform.tfvars.template``` to ```terraform.tfvars```, and set the tf
 
 Deploy this terraform and verify the resource tags are created.
 
-```
-Default tags:
+### Deploy and Destroy
 
--  Owner
--  SourceIP
--  UserType
--  EventTime
--  UserName / RoleName
+#### Resources in a single region
 
-```
+- Deploy resources:
+
+   `terraform init`
+
+   `terraform plan`
+
+   `terraform apply`
+
+- Destroy resources:
+
+   `terraform destroy`
+
+#### Resources in multiple regions
+
+- Deploy resources:
+
+   `sh multi-region-deploy.sh`
+
+- Destroy resources:
+
+   `sh multi-region-destroy.sh`
+
+
+### Support auto-tagging resources
+  
+  - EC2
+  - ELB
+  - RDS
+  - CloudFront
+  - Lambda
+  - SNS
+
+
+### Default tags
+  
+   -  Owner
+   -  SourceIP
+   -  UserType
+   -  EventTime
+   -  UserName / RoleName
+
