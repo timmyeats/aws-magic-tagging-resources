@@ -15,4 +15,6 @@ module "lambda" {
   create_role   = false
   lambda_role   = local.lambda_function_role.arn
   tags          = var.resource_tags
+
+  cloudwatch_logs_retention_in_days = 90
 }
