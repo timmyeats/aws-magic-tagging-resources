@@ -30,6 +30,11 @@ locals {
       service    = "Lambda"
       source     = ["aws.lambda"]
       event_name = [{ "prefix" = "Create" }]
+    },
+    {
+      service    = "IAM"
+      source     = ["aws.iam"]
+      event_name = ["CreateRole", "CreatePolicy"]
     }
   ]
 }
