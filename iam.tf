@@ -1,7 +1,3 @@
-locals {
-  lambda_function_role_name = "AWSAutoTaggingFunctionRole"
-}
-
 data "aws_iam_role" "lambda_function_role" {
   count = terraform.workspace == "default" ? 0 : 1
   name  = var.lambda_function_role_name
