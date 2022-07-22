@@ -7,5 +7,5 @@ enable_cloudwatch_dashboard = false
 resource_tags = {
   terraform = "true"
   project   = "aws-magic-tagging-resources"
-  version   = "v1.5.0"
+  version   = "v1.6.0"
 }
