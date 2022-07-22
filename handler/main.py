@@ -13,6 +13,8 @@ def get_tag_information(event, tags={}):
     print("[Event]", event)
     tags["SourceIP"] = event["detail"]["sourceIPAddress"]
     tags["EventTime"] = event["detail"]["eventTime"]
+    if event["detail"]["userAgent"] != "AWS Internal":
+        print("[UserAgent]", event["detail"]["userAgent"])
     tags = taggers.get_event_time(event, tags, utc_time=8)
     tags = taggers.get_identity_type(event, tags)
     return tags
