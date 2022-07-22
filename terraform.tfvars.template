@@ -2,6 +2,8 @@
 # Varaibles
 #############################################
 
+enable_cloudwatch_dashboard = false
+
 resource_tags = {
   terraform = "true"
   project   = "aws-magic-tagging-resources"

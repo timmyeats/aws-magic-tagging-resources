@@ -5,7 +5,7 @@ locals {
 module "lambda" {
   source        = "terraform-aws-modules/lambda/aws"
   version       = "3.3.1"
-  function_name = "AWSAutoTaggingFunction"
+  function_name = var.lambda_function_name
   description   = "The auto-tagging lambda function for AWS resources"
   handler       = "main.lambda_handler"
   runtime       = "python3.9"

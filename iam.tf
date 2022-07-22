@@ -4,12 +4,12 @@ locals {
 
 data "aws_iam_role" "lambda_function_role" {
   count = terraform.workspace == "default" ? 0 : 1
-  name  = local.lambda_function_role_name
+  name  = var.lambda_function_role_name
 }
 
 resource "aws_iam_role" "lambda_function_role" {
   count       = terraform.workspace == "default" ? 1 : 0
-  name        = local.lambda_function_role_name
+  name        = var.lambda_function_role_name
   description = "Allow Lambda to tag resources"
   tags        = var.resource_tags
   assume_role_policy = jsonencode(
