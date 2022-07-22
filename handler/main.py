@@ -10,7 +10,7 @@ import resource_tagger.taggers as taggers
 
 # Get tag information from event
 def get_tag_information(event, tags={}):
-    print(event)
+    print("[Event]", event)
     tags["SourceIP"] = event["detail"]["sourceIPAddress"]
     tags["EventTime"] = event["detail"]["eventTime"]
     tags = taggers.get_event_time(event, tags, utc_time=8)
