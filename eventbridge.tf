@@ -4,7 +4,7 @@ locals {
     {
       service    = "EC2"
       source     = ["aws.ec2"]
-      event_name = [{ "prefix" = "Create" }, "RunInstances", "AllocateAddress", "CopyImage", "CopySnapshot"]
+      event_name = [{ "prefix" = "Create" }, { "prefix" = "Copy" }, "RunInstances", "AllocateAddress"]
     },
     {
       service    = "ELB"
