@@ -71,6 +71,7 @@ Deploy this terraform and verify the resource tags are created.
   - CloudFront
   - Lambda
   - SNS
+  - IAM
 
 
 ### Default tags

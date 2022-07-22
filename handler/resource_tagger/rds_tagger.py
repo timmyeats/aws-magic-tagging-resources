@@ -1,11 +1,11 @@
 import boto3
 from .taggers import get_resource_arn
+from .taggers import changing_tag_to_array
 
 
 # Create tags for AWS resources
-def add_tags_in_resource(tags, resource, add_tags=[]):
-    for tag_key, tag_value in tags.items():
-        add_tags.append({"Key": tag_key, "Value": tag_value})
+def add_tags_in_resource(tags, resource):
+    add_tags = changing_tag_to_array(tags)
 
     try:
         client = boto3.client("rds")
