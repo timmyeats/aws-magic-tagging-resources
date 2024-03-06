@@ -1,6 +1,6 @@
 # AWS Magic Tagging Resources
 
-Use the EventBridge to trigger a Lambda function to tag resources in AWS.
+This script is designed to automatically tag AWS resources when certain events occur. It is intended to be used as an AWS Lambda function, triggered by AWS EventBridge.
 
 ## Prerequisites
 
@@ -31,6 +31,8 @@ resource_tags = {
 - IAM Policy
 - Log Group
 - EventBridge Rule
+- Resource Group
+- CloudWatch Dashboard
 
 ## How to use this
 
@@ -62,6 +64,12 @@ Deploy this terraform and verify the resource tags are created.
 
    `sh multi-region-destroy.sh`
 
+## Functionality
+
+1. **Extracting Tag Information**: The `get_tag_information` function extracts tag information from the event, including the source IP address, event time, and user agent. It also calls the `taggers.get_event_time` and `taggers.get_identity_type` functions to get additional tag information.
+
+2. **Adding Tags**: The `lambda_handler` function is the entry point for the Lambda function. It first calls the `get_tag_information` function to get the tag information, then decides which type of AWS resource to add tags to based on the source of the event. For example, if the source of the event is "aws.ec2", it calls the `ec2_tagger.tagger` function to add tags to EC2 resources.
+
 
 ### Support auto-tagging resources
 
@@ -72,6 +80,7 @@ Deploy this terraform and verify the resource tags are created.
   - Lambda
   - SNS
   - IAM
+  - AutoScaling
 
 
 ### Default tags
