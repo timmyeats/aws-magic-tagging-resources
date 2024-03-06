@@ -1,0 +1,65 @@
+default_language_version:
+  python: python3.9
+repos:
+  # General
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: detect-aws-credentials
+        args: [--allow-missing-credentials]
+      - id: detect-private-key
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-ast
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-yaml
+      - id: check-toml
+      - id: check-symlinks
+      - id: check-xml
+      - id: destroyed-symlinks
+      - id: end-of-file-fixer
+      - id: check-byte-order-marker
+      - id: mixed-line-ending
+      - id: name-tests-test
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.18.1
+    hooks:
+      - id: gitleaks
+
+  # Python
+  - repo: https://github.com/psf/black # Can choose between black or autopep8
+    rev: 24.1.1
+    hooks:
+      - id: black
+        args: [-t, py39]
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.0
+    hooks:
+      - id: pyupgrade
+        args: [--py39-plus]
+  - repo: https://github.com/asottile/add-trailing-comma
+    rev: v3.1.0
+    hooks:
+      - id: add-trailing-comma
+  - repo: https://github.com/asottile/reorder_python_imports
+    rev: v3.1.0
+    hooks:
+      - id: reorder-python-imports
+
+  # Terraform
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: v0.17.0
+    hooks:
+      - id: terraform-docs-go
+        args:
+          ["markdown", "table", "--output-file", "README.md", "."]
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.86.0
+    hooks:
+      - id: terraform_fmt
+        args: [--args=-diff]

@@ -25,7 +25,7 @@ resource "aws_iam_role" "lambda_function_role" {
   )
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_basic_permission" {
+resource "aws_iam_role_policy_attachment" "lambda_basic_policy" {
   count      = terraform.workspace == "default" ? 1 : 0
   role       = aws_iam_role.lambda_function_role[count.index].name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
@@ -51,6 +51,8 @@ resource "aws_iam_policy" "lambda_tagging_policy" {
           "Effect" : "Allow",
           "Action" : [
             "ec2:*Tag*",
+            "ec2:DescribeImages",
+            "ec2:DescribeInstances",
             "elasticloadbalancing:*Tag*",
             "rds:*Tag*",
             "cloudfront:*Tag*",
@@ -59,6 +61,7 @@ resource "aws_iam_policy" "lambda_tagging_policy" {
             "sns:*Tag*",
             "lambda:*Tag*",
             "iam:*Tag*",
+            "autoscaling:*Tag*",
           ],
           "Resource" : "*"
         }

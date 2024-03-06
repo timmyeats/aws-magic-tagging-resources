@@ -35,6 +35,11 @@ locals {
       service    = "IAM"
       source     = ["aws.iam"]
       event_name = ["CreateRole", "CreatePolicy"]
+    },
+    {
+      service    = "AutoScaling"
+      source     = ["aws.autoscaling"]
+      event_name = ["CreateAutoScalingGroup"]
     }
   ]
 }
