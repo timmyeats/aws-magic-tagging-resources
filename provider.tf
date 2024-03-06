@@ -17,5 +17,6 @@ provider "aws" {
 }
 
 output "completed_region" {
-  value = data.aws_region.current.name
+  value       = data.aws_region.current.name
+  description = "The region that the Lambda function was created"
 }
