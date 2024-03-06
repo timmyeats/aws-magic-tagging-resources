@@ -1,10 +1,11 @@
 locals {
   dashboard_query = <<-EOT
-    SOURCE '/aws/lambda/${var.lambda_function_name}' 
+    SOURCE '/aws/lambda/${var.lambda_function_name}'
     | fields @timestamp, @message
     | filter @message not like 'START RequestId'
     | filter @message not like 'REPORT RequestId'
     | filter @message not like 'END RequestId'
+    | filter @message not like 'INIT_START'
     | sort @timestamp desc
     | limit 100
     EOT
