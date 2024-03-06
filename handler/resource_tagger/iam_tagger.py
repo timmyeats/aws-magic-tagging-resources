@@ -1,35 +1,30 @@
 import boto3
-from .taggers import get_resource_arn
+
 from .taggers import changing_tag_to_array
+from .taggers import get_resource_arn
 
 
 # Create tags for AWS resources
 def add_tags_in_resource(tags, resource):
-    add_tags = changing_tag_to_array(tags)
+    converted_tags = changing_tag_to_array(tags)
     try:
         client = boto3.client("iam")
-        response = client.tag_policy(
-            PolicyArn=resource,
-            Tags=add_tags
-        )
+        response = client.tag_policy(PolicyArn=resource, Tags=converted_tags)
     except Exception as e:
         response = {"[LOG] Error: ": str(e)}
 
-    return response, add_tags
+    return response, converted_tags
 
 
 def add_tags_in_role(tags, resource):
-    add_tags = changing_tag_to_array(tags)
+    converted_tags = changing_tag_to_array(tags)
     try:
         client = boto3.client("iam")
-        response = client.tag_role(
-            RoleName=resource,
-            Tags=add_tags
-        )
+        response = client.tag_role(RoleName=resource, Tags=converted_tags)
     except Exception as e:
         response = {"[LOG] Error: ": str(e)}
 
-    return response, add_tags
+    return response, converted_tags
 
 
 def tagger(event, tags, response=None):
@@ -37,16 +32,16 @@ def tagger(event, tags, response=None):
 
     if event["detail"]["eventName"] == "CreateRole":
         resource_name = response_elements["role"]["roleName"]
-        response, tags = add_tags_in_role(tags, resource_name)
+        response, converted_tags = add_tags_in_role(tags, resource_name)
         response["resource_name"] = resource_name
-        
+
     elif event["detail"]["eventName"] == "CreatePolicy":
         resource_arn = get_resource_arn(response_elements)
-        response, tags = add_tags_in_resource(tags, resource_arn)
+        response, converted_tags = add_tags_in_resource(tags, resource_arn)
         response["resource_arn"] = resource_arn
-    
+
     else:
         return "[LOG] No resource arn found!"
 
-    response["tags"] = tags
+    response["converted_tags"] = converted_tags
     return response
