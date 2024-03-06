@@ -1,5 +1,5 @@
-import re
 import datetime
+import re
 
 
 def get_identity_type(event, tags):
@@ -7,7 +7,9 @@ def get_identity_type(event, tags):
 
     if tags["UserType"] == "AssumedRole":
         tags["Owner"] = event["detail"]["userIdentity"]["principalId"].split(":")[1]
-        tags["RoleName"] = event["detail"]["userIdentity"]["sessionContext"]["sessionIssuer"]["userName"]
+        tags["RoleName"] = event["detail"]["userIdentity"]["sessionContext"][
+            "sessionIssuer"
+        ]["userName"]
 
     elif tags["UserType"] == "IAMUser":
         tags["Owner"] = event["detail"]["userIdentity"]["userName"]
@@ -23,9 +25,14 @@ def get_identity_type(event, tags):
 
 # Get resource event time and convert to UTC timezone
 def get_event_time(event, tags, utc_time=0):
-    event_time = datetime.datetime.strptime(event["detail"]["eventTime"], "%Y-%m-%dT%H:%M:%SZ")
+    event_time = datetime.datetime.strptime(
+        event["detail"]["eventTime"],
+        "%Y-%m-%dT%H:%M:%SZ",
+    )
     event_time = event_time + datetime.timedelta(hours=utc_time)
-    event_time = event_time.replace(tzinfo=datetime.timezone(datetime.timedelta(hours=utc_time)))
+    event_time = event_time.replace(
+        tzinfo=datetime.timezone(datetime.timedelta(hours=utc_time)),
+    )
     tags["EventTime"] = event_time.strftime("%Y-%m-%dT%H:%M:%S%z")
     return tags
 
@@ -62,14 +69,20 @@ def response_elements_data_processing(response_elements, regular_expression):
 # Get resource id from event
 def get_resource_id(response_elements):
     regular_expression = "[a-z]*?-.*"
-    resource_id = response_elements_data_processing(response_elements, regular_expression)
+    resource_id = response_elements_data_processing(
+        response_elements,
+        regular_expression,
+    )
     return resource_id
 
 
 # Get resource arn from event
 def get_resource_arn(response_elements):
-    regular_expression = "arn\:aws\:.*"
-    resource_arn = response_elements_data_processing(response_elements, regular_expression)
+    regular_expression = r"arn\:aws\:.*"
+    resource_arn = response_elements_data_processing(
+        response_elements,
+        regular_expression,
+    )
     return resource_arn
 
 
@@ -78,4 +91,4 @@ def changing_tag_to_array(tags):
     tags_array = []
     for key, value in tags.items():
         tags_array.append({"Key": key, "Value": value})
-    return tags_array   
+    return tags_array
