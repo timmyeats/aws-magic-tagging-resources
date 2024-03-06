@@ -59,27 +59,27 @@ def tagger(event, tags, resource_id=None):
         resource_id = get_resource_id(response_elements)
 
     if event_name == "RunInstances" and resource_id is not None:
-        response, tags = add_tags_in_resource(tags, resource_id)
+        response, converted_tags = add_tags_in_resource(tags, resource_id)
         volume_ids = get_ebs_volume_ids(resource_id)
         for volume_id in volume_ids:
-            response, tags = add_tags_in_resource(tags, volume_id)
+            add_tags_in_resource(tags, volume_id)
         response["resource_id"] = resource_id
-        response["tags"] = tags
+        response["converted_tags"] = converted_tags
         return response
 
     elif event_name == "CreateImage" and resource_id is not None:
-        response, tags = add_tags_in_resource(tags, resource_id)
+        response, converted_tags = add_tags_in_resource(tags, resource_id)
         snapshot_ids = get_ami_snapshot_id(resource_id)
         for snapshot_id in snapshot_ids:
-            response, tags = add_tags_in_resource(tags, snapshot_id)
+            add_tags_in_resource(tags, snapshot_id)
         response["resource_id"] = resource_id
-        response["tags"] = tags
+        response["converted_tags"] = converted_tags
         return response
 
     elif resource_id is not None:
-        response, tags = add_tags_in_resource(tags, resource_id)
+        response, converted_tags = add_tags_in_resource(tags, resource_id)
         response["resource_id"] = resource_id
-        response["tags"] = tags
+        response["converted_tags"] = converted_tags
         return response
 
     else:
