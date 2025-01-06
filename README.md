@@ -2,6 +2,119 @@
 
 This script is designed to automatically tag AWS resources when certain events occur. It is intended to be used as an AWS Lambda function, triggered by AWS EventBridge.
 
+## Architecture
+
+```mermaid
+graph TB
+    subgraph "Event Sources"
+        EC2[EC2]:::aws
+        ELB[ELB]:::aws
+        RDS[RDS]:::aws
+        CF[CloudFront]:::aws
+        LM[Lambda]:::aws
+        SNS[SNS]:::aws
+        IAM[IAM]:::aws
+        AS[AutoScaling]:::aws
+        EB["EventBridge"]:::aws
+    end
+
+    subgraph "Lambda Function"
+        MH["Main Handler"]:::lambda
+        click MH "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/handler/main.py"
+        
+        subgraph "Resource Taggers"
+            AST["AutoScaling Tagger"]:::tagger
+            click AST "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/handler/resource_tagger/autoscaling_tagger.py"
+            CFT["CloudFront Tagger"]:::tagger
+            click CFT "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/handler/resource_tagger/cloudfront_tagger.py"
+            EC2T["EC2 Tagger"]:::tagger
+            click EC2T "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/handler/resource_tagger/ec2_tagger.py"
+            ELBT["ELB Tagger"]:::tagger
+            click ELBT "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/handler/resource_tagger/elb_tagger.py"
+            IAMT["IAM Tagger"]:::tagger
+            click IAMT "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/handler/resource_tagger/iam_tagger.py"
+            LMT["Lambda Tagger"]:::tagger
+            click LMT "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/handler/resource_tagger/lambda_tagger.py"
+            RDST["RDS Tagger"]:::tagger
+            click RDST "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/handler/resource_tagger/rds_tagger.py"
+            SNST["SNS Tagger"]:::tagger
+            click SNST "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/handler/resource_tagger/sns_tagger.py"
+            CU["Common Utilities"]:::util
+            click CU "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/handler/resource_tagger/taggers.py"
+        end
+    end
+
+    subgraph "IAM Layer"
+        ROLE["IAM Role"]:::iam
+        POL["IAM Policies"]:::iam
+        click ROLE "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/iam.tf"
+        click POL "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/iam.tf"
+    end
+
+    subgraph "Monitoring"
+        CWL["CloudWatch Logs"]:::monitoring
+        CWD["CloudWatch Dashboard"]:::monitoring
+        RG["Resource Group"]:::monitoring
+        click CWD "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/cw_dashboard.tf"
+        click RG "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/resource_group.tf"
+    end
+
+    subgraph "Infrastructure"
+        LFC["Lambda Configuration"]:::infra
+        MRD["Multi-region Deploy"]:::infra
+        APC["AWS Provider Config"]:::infra
+        VC["Variables Config"]:::infra
+        click LFC "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/lambda.tf"
+        click MRD "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/multi-region-deploy.sh"
+        click APC "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/provider.tf"
+        click VC "https://github.com/timmyeats/aws-magic-tagging-resources/blob/main/variables.tf"
+    end
+
+    %% Event Flow
+    EC2 --> EB
+    ELB --> EB
+    RDS --> EB
+    CF --> EB
+    LM --> EB
+    SNS --> EB
+    IAM --> EB
+    AS --> EB
+    
+    EB --> MH
+    
+    MH --> AST & CFT & EC2T & ELBT & IAMT & LMT & RDST & SNST
+    AST & CFT & EC2T & ELBT & IAMT & LMT & RDST & SNST --> CU
+    
+    %% Permissions
+    ROLE -.-> MH
+    POL -.-> ROLE
+    
+    %% Monitoring Flow
+    MH ..-> CWL
+    CWL ..-> CWD
+    CWL ..-> RG
+
+    %% Infrastructure Connections
+    LFC --- MH
+    MRD --- LFC
+    APC --- MRD
+    VC --- LFC
+
+    %% Styles
+    classDef aws fill:#FF9900,stroke:#232F3E,color:#232F3E
+    classDef lambda fill:#2496ED,stroke:#232F3E,color:white
+    classDef tagger fill:#85B09A,stroke:#232F3E,color:white
+    classDef util fill:#B8E0D2,stroke:#232F3E,color:#232F3E
+    classDef iam fill:#FFD700,stroke:#232F3E,color:#232F3E
+    classDef monitoring fill:#7CBA3D,stroke:#232F3E,color:white
+    classDef infra fill:#3B48CC,stroke:#232F3E,color:white
+```
+
+<div style="text-align: center;">
+Drawn by <a href="https://github.com/ahmedkhaleel2004/gitdiagram">GitDiagram</a>
+</div>
+
+
 ## Prerequisites
 
 - Install Terraform
